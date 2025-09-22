@@ -62,5 +62,34 @@ jobs:
         cache: maven
     - name: Build Project
       run: mvn package
+    - name: Upload Jar Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-jar
+        path: target/*.jar
+ Build_Docker_Image_And_Push:
+    runs-on: ubuntu-latest
+    needs: Build_Package
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download Jar Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: app-jar
+        path: app
+    - name: Login to HARBOR
+      uses: docker/login-action@v3
+      with:
+          username: ${{ vars.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: 192.168.61.195:30003/vaptregistry/app:latest
 
     
