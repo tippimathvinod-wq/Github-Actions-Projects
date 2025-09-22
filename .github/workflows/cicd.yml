@@ -80,8 +80,8 @@ jobs:
     - name: Login to HARBOR
       uses: docker/login-action@v3
       with:
-          username: ${{ vars.HARBOR_USERNAME }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
@@ -90,6 +90,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: 192.168.61.195:30003/vaptregistry/app:latest
+        tags: vinod969/vinod/app:latest
 
     
